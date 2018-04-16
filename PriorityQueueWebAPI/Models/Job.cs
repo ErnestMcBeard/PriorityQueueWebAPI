@@ -12,6 +12,7 @@ namespace PriorityQueueWebAPI.Models
         public bool Completed { get; set; }
         public DateTime Entered { get; set; }
         public DateTime Started { get; set; }
+        public DateTime Finished { get; set; }
         public Guid NextJob { get; set; }
         public Guid PreviousJob { get; set; }
         public Guid Customer { get; set; }
