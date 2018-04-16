@@ -28,10 +28,10 @@ namespace PriorityQueueWebAPI
             // New Code
             ODataModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Customer>("Customer");
-            builder.RemoveEntitySet("Job");
             builder.EntitySet<Job>("Job");
             builder.EntitySet<Manager>("Manager");
             builder.EntitySet<Technician>("Technician");
+            builder.EntitySet<DailyStatistic>("DailyStatistic");
             config.MapODataServiceRoute(
                 routeName: "ODataRoute",
                 routePrefix: null,

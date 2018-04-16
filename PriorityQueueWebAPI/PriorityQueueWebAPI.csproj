@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DailyStatisticController.cs" />
     <Compile Include="Controllers\TechnicianController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -119,6 +120,8 @@
     </Compile>
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerContext.cs" />
+    <Compile Include="Models\DailyStatistic.cs" />
+    <Compile Include="Models\DailyStatisticContext.cs" />
     <Compile Include="Models\JobContext.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\Manager.cs" />

@@ -9,7 +9,7 @@ namespace PriorityQueueWebAPI.Models
     public class CustomerContext : DbContext
     {
         public CustomerContext()
-                : base("name=CustomerContext")
+                : base("name=CustomerContext1")
         {
         }
         public DbSet<Customer> Customers { get; set; }
