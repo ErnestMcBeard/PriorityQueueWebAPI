@@ -47,12 +47,24 @@ namespace PriorityQueueWebAPI
 
         protected void GenerateMonth_Click(object sender, EventArgs e)
         {
-            int month;
-            if (!IsMonthValid(out month))
+            int month, year;
+            if (!(IsMonthValid(out month) && IsYearValid(out year)))
             {
                 DateError.Visible = true;
                 return;
             }
+
+            DateTime date;
+            try
+            {
+                date = new DateTime(year, month, 1);
+            }
+            catch
+            {
+                DateError.Visible = true;
+                return;
+            }
+
             DateError.Visible = false;
         }
 
