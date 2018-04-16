@@ -114,6 +114,7 @@ namespace PriorityQueueWebAPI.Controllers
             return Updated(update);
         }
 
+        [HttpDelete]
         public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
         {
             var job = await db.Jobs.FindAsync(key);

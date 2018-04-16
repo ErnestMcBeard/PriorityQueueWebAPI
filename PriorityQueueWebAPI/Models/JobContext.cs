@@ -9,7 +9,7 @@ namespace PriorityQueueWebAPI.Models
     public class JobContext : DbContext
     {
         public JobContext()
-                : base("name=JobContext1")
+                : base("name=JobContext2")
         {
         }
 
