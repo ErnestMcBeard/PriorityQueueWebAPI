@@ -21,6 +21,33 @@
                 <asp:Button Text="Generate (Day)" runat="server" OnClick="GenerateDay_Click"/>
                 <asp:Button Text="Generate (Month)" runat="server" OnClick="GenerateMonth_Click"/>
             </div>
+
+            <table style="width:100%">
+                <tr>
+                    <th>Date</th>
+                    <th>Average Wait Time</th>
+                    <th>Average Queue Size</th>
+                    <th>Job Response Rate</th>
+                    <th>Empty Queue Time</th>
+                </tr>
+                <tr>
+                    <td>
+                        <asp:Label runat="server" ID="DateLabel">-</asp:Label>
+                    </td>
+                    <td>
+                         <asp:Label runat="server" ID="AverageWaitTime">-</asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label runat="server" ID="AverageQueueSize">-</asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label runat="server" ID="JobResponseRate">-</asp:Label>
+                    </td>
+                    <td>
+                        <asp:Label runat="server" ID="EmptyQueueTime">-</asp:Label>
+                    </td>
+                </tr>
+            </table>
         </div>
     </form>
 </body>

@@ -51,6 +51,12 @@ namespace PriorityQueueWebAPI
             var jobResponseRate = await StatGenerator.JobResponseRate(date);
             var queueEmptyTime = await StatGenerator.QueueEmptyTime(date);
             //var technicianIdleTime = await StatGenerator.TechnicianIdleTime(date);
+
+            DateLabel.Text = date.ToString();
+            AverageWaitTime.Text = averageWaitTime.ToString() + " hour(s)" ;
+            AverageQueueSize.Text = averageQueueSize.ToString() + " job(s)";
+            JobResponseRate.Text = jobResponseRate.ToString() + " hour(s)";
+            EmptyQueueTime.Text = queueEmptyTime.ToString() + "%";
         }
 
         protected async void GenerateMonth_Click(object sender, EventArgs e)
