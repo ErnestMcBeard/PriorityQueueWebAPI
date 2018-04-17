@@ -45,15 +45,19 @@ namespace PriorityQueueWebAPI.Helpers
             }
 
             var jobs = await WebApiHelper.Get<Job>(jobQuery);
-            double total = 0;
-            foreach (Job job in jobs)
+
+            if (jobs.Count > 0)
             {
-                TimeSpan difference = (job.Started - job.Entered);
-                total += difference.Hours + difference.Minutes / 60d;
+                double total = 0;
+                foreach (Job job in jobs)
+                {
+                    TimeSpan difference = (job.Started - job.Entered);
+                    total += difference.Hours + difference.Minutes / 60d;
+                }
+                return total / jobs.Count;
             }
 
-            double avg = total / jobs.Count;
-            return avg;
+            return 0;
         }
 
         //Average queue size
@@ -62,6 +66,12 @@ namespace PriorityQueueWebAPI.Helpers
             Dictionary<int, TimeSpan> sizeByTime = await GetQueueSizeTimes(givenDate);
 
             double maxSize = sizeByTime.Max(x => x.Key);
+
+            if (maxSize == 0)
+            {
+                return 0;
+            }
+
             double totalHours = sizeByTime.Sum(x => x.Value.TotalHours);
             double averageSize = 0;
 
@@ -94,8 +104,8 @@ namespace PriorityQueueWebAPI.Helpers
             }
 
             var jobs = await WebApiHelper.Get<Job>(jobQuery);
-            var entered = jobs.Where(x => x.Entered == givenDate);
-            var removed = jobs.Where(x => x.Finished == givenDate);
+            var entered = jobs.Where(x => givenDate <= x.Entered && x.Entered < givenDate.AddDays(1));
+            var removed = jobs.Where(x => givenDate <= x.Finished && x.Finished < givenDate.AddDays(1));
 
             List<QueueChange> changes = new List<QueueChange>();
             foreach (var entry in entered)
@@ -135,7 +145,7 @@ namespace PriorityQueueWebAPI.Helpers
             {
                 if (!sizeByTime.ContainsKey(prevSize))
                     sizeByTime[prevSize] = new TimeSpan();
-                sizeByTime[prevSize] += orderedChanges[i].date - prevDate;
+                sizeByTime[prevSize] += orderedChanges[i].date.DateTime - prevDate.DateTime;
 
                 if (orderedChanges[i].type == QueueChange.ChangeType.Entered)
                     prevSize++;
@@ -161,7 +171,7 @@ namespace PriorityQueueWebAPI.Helpers
             double summedTotalHours = sizeByTime.Sum(x => x.Value.TotalHours);
             double emptyHours = sizeByTime[0].TotalHours;
 
-            return emptyHours / summedTotalHours;
+            return emptyHours / summedTotalHours * 100;
         }
 
         //Number of jobs entered on this day (or this month) not started on the entry date
