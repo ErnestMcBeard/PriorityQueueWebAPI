@@ -38,11 +38,16 @@
                 <p>Percentage of time the queue was empty:</p>
                 <asp:Label runat="server" ID="EmptyQueueTime"></asp:Label>
             </div>
-            <asp:ListView runat="server" ID="TechnicianList">
-                <ItemTemplate>
-                    <asp:Label runat="server" Text='<%#Eval("FirstName") %>'/>
-                </ItemTemplate>
-            </asp:ListView>
+            <div style="margin-top: 5px;">
+                <asp:ListView runat="server" ID="TechnicianList">
+                    <ItemTemplate>
+                        <div>
+                            <asp:Label runat="server" ID="Username" Text='<%#Eval("t.Username") %>' />
+                            <asp:Label runat="server" ID="Hours" Text='<%#Eval("idleHours") %>' />
+                        </div>
+                    </ItemTemplate>
+                </asp:ListView>
+            </div>
 
         </div>
     </form>

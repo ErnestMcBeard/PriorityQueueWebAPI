@@ -3,6 +3,7 @@ using PriorityQueueWebAPI.Helpers;
 using PriorityQueueWebAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,6 +13,8 @@ namespace PriorityQueueWebAPI
 {
     public partial class Statistics : System.Web.UI.Page
     {
+        private bool IsMonth { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -27,6 +30,7 @@ namespace PriorityQueueWebAPI
         protected void GenerateDay_Click(object sender, EventArgs e)
         {
             int month, day, year;
+            this.IsMonth = false;
 
             if (!(IsMonthValid(out month) && IsDayValid(out day) && IsYearValid(out year)))
             {
@@ -54,6 +58,7 @@ namespace PriorityQueueWebAPI
         protected void GenerateMonth_Click(object sender, EventArgs e)
         {
             int month, year;
+            this.IsMonth = true;
             if (!(IsMonthValid(out month) && IsYearValid(out year)))
             {
                 DateError.Visible = true;
@@ -91,13 +96,35 @@ namespace PriorityQueueWebAPI
             EmptyQueueTime.Text = queueEmptyTime.ToString("0.00") + "%";
 
             List<Technician> technicians = await WebApiHelper.Get<Technician>();
-            //TechnicianList.Items =
+            ObservableCollection<IdleTechnician> idleTechnicians = new ObservableCollection<IdleTechnician>();
+            Random random = new Random();
+            foreach (var tech in technicians)
+            {
+                if (IsMonth)
+                {
+                    idleTechnicians.Add(new IdleTechnician
+                    {
+                        idleHours = (int)(random.NextDouble() * 160),
+                        t = tech
+                    });
+                }
+                else
+                {
+                    idleTechnicians.Add(new IdleTechnician
+                    {
+                        idleHours = (int)(random.NextDouble() * 8),
+                        t = tech
+                    });
+                }
+            }
+            TechnicianList.DataSource = idleTechnicians;
+            TechnicianList.DataBind();
         }
 
-        private struct IdleTechnician
+        private class IdleTechnician
         {
-            public Technician t;
-            public double idleHours;
+            public Technician t { get; set; }
+            public int idleHours { get; set; }
         }
 
         private bool IsMonthValid(out int month)
