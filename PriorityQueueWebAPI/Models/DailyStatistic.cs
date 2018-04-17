@@ -8,7 +8,7 @@ namespace PriorityQueueWebAPI.Models
     public class DailyStatistic
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
         public int LastQueueLength { get; set; }
     }
 }

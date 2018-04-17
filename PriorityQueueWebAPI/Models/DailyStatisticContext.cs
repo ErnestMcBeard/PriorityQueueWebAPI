@@ -8,7 +8,7 @@ namespace PriorityQueueWebAPI.Models
 {
     public class DailyStatisticContext : DbContext
     {
-        public DailyStatisticContext () : base("name=DailyStatisticContext")
+        public DailyStatisticContext () : base("name=DailyStatisticContext1")
         {
 
         }
