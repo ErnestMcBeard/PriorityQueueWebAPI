@@ -121,8 +121,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\ODataResponse.cs" />
-    <Compile Include="Helper\WebApiHelper.cs" />
+    <Compile Include="Helpers\ODataResponse.cs" />
+    <Compile Include="Helpers\StatGenerator.cs" />
+    <Compile Include="Helpers\WebApiHelper.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerContext.cs" />
     <Compile Include="Models\DailyStatistic.cs" />

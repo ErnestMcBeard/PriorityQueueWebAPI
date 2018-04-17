@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Statistics.aspx.cs" Inherits="PriorityQueueWebAPI.Statistics" %>
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="Statistics.aspx.cs" Inherits="PriorityQueueWebAPI.Statistics" %>
 
 <!DOCTYPE html>
 

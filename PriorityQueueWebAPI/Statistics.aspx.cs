@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PriorityQueueWebAPI.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,7 +22,7 @@ namespace PriorityQueueWebAPI
         }
 
         //http://localhost:51578/Statistics.aspx
-        protected void GenerateDay_Click(object sender, EventArgs e)
+        protected async void GenerateDay_Click(object sender, EventArgs e)
         {
             int month, day, year;
 
@@ -43,9 +44,16 @@ namespace PriorityQueueWebAPI
             }
 
             DateError.Visible = false;
+
+            StatGenerator.Period = StatGenerator.StatPeriod.Day;
+            var averageQueueSize = await StatGenerator.AverageQueueSize(date);
+            var averageWaitTime = await StatGenerator.AverageWaitTime(date);
+            var jobResponseRate = await StatGenerator.JobResponseRate(date);
+            var queueEmptyTime = await StatGenerator.QueueEmptyTime(date);
+            //var technicianIdleTime = await StatGenerator.TechnicianIdleTime(date);
         }
 
-        protected void GenerateMonth_Click(object sender, EventArgs e)
+        protected async void GenerateMonth_Click(object sender, EventArgs e)
         {
             int month, year;
             if (!(IsMonthValid(out month) && IsYearValid(out year)))
@@ -66,6 +74,13 @@ namespace PriorityQueueWebAPI
             }
 
             DateError.Visible = false;
+
+            StatGenerator.Period = StatGenerator.StatPeriod.Month;
+            var averageQueueSize = await StatGenerator.AverageQueueSize(date);
+            var averageWaitTime = await StatGenerator.AverageWaitTime(date);
+            var jobResponseRate = await StatGenerator.JobResponseRate(date);
+            var queueEmptyTime = await StatGenerator.QueueEmptyTime(date);
+            //var technicianIdleTime = await StatGenerator.TechnicianIdleTime(date);
         }
 
         private bool IsMonthValid(out int month)

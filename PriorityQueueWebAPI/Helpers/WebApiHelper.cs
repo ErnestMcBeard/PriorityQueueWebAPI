@@ -53,7 +53,7 @@ namespace MODELPriorityQueue.Models
         /// </summary>
         /// <param name="query">The filter, orderby, etc. See this method definition for examples</param>
         /// <returns>An object from DbSet<T> with the given id, or null if it does not exist</returns>
-        public static async Task<T> Get<T>(string query)
+        public static async Task<List<T>> Get<T>(string query)
         {
             //Basic Query Examples
             //Filter:   $filter=Firstname eq 'John' and TimesServiced eq 2
@@ -65,9 +65,9 @@ namespace MODELPriorityQueue.Models
             string response = await client.GetStringAsync(string.Format("{0}?{1}", BaseUrl<T>(), query));
             if (!string.IsNullOrEmpty(response))
             {
-                return JsonConvert.DeserializeObject<ODataResponse<T>>(response).Value.FirstOrDefault();
+                return JsonConvert.DeserializeObject<ODataResponse<T>>(response).Value;
             }
-            return default(T);
+            return null;
         }
 
         /// <summary>
