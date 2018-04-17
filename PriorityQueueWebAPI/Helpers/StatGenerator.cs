@@ -36,12 +36,12 @@ namespace PriorityQueueWebAPI.Helpers
             if (Period == StatPeriod.Day)
             {
                 givenDate = BeginningOfDay(givenDate);
-                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddDays(1)));
+                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Started ne {2}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddDays(1)), FilterFormatDTO(default(DateTimeOffset)));
             }
             else
             {
                 givenDate = BeginningOfMonth(givenDate);
-                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddMonths(1)));
+                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Started ne {2}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddMonths(1)), FilterFormatDTO(default(DateTimeOffset)));
             }
 
             var jobs = await WebApiHelper.Get<Job>(jobQuery);
@@ -51,8 +51,8 @@ namespace PriorityQueueWebAPI.Helpers
                 double total = 0;
                 foreach (Job job in jobs)
                 {
-                    TimeSpan difference = (job.Started - job.Entered);
-                    total += difference.Hours + difference.Minutes / 60d;
+                    TimeSpan difference = (job.Started.DateTime - job.Entered.DateTime);
+                    total += difference.TotalHours;
                 }
                 return total / jobs.Count;
             }
@@ -169,9 +169,13 @@ namespace PriorityQueueWebAPI.Helpers
             Dictionary<int, TimeSpan> sizeByTime = await GetQueueSizeTimes(givenDate);
 
             double summedTotalHours = sizeByTime.Sum(x => x.Value.TotalHours);
-            double emptyHours = sizeByTime[0].TotalHours;
+            if (sizeByTime.ContainsKey(0))
+            {
+                double emptyHours = sizeByTime[0].TotalHours;
+                return emptyHours / summedTotalHours * 100;
+            }
 
-            return emptyHours / summedTotalHours * 100;
+            return 0;
         }
 
         //Number of jobs entered on this day (or this month) not started on the entry date
@@ -182,16 +186,16 @@ namespace PriorityQueueWebAPI.Helpers
             if (Period == StatPeriod.Day)
             {
                 givenDate = BeginningOfDay(givenDate);
-                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Finished gt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddDays(1)));
+                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Started gt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddDays(1)));
             }
             else
             {
                 givenDate = BeginningOfMonth(givenDate);
-                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Finished gt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddMonths(1)));
+                jobQuery = string.Format("$filter=Entered gt {0} and Entered lt {1} and Started gt {1}", FilterFormatDTO(givenDate), FilterFormatDTO(givenDate.AddMonths(1)));
             }
 
             var jobs = await WebApiHelper.Get<Job>(jobQuery);
-            return jobs.Where(x => x.Finished >= EarliestPointNextDay(x.Entered)).Count();
+            return jobs.Where(x => x.Started >= EarliestPointNextDay(x.Entered)).Count();
         }
 
         private static DateTimeOffset EarliestPointNextDay(DateTimeOffset date)

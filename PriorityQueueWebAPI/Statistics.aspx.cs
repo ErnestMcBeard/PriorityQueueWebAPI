@@ -1,4 +1,6 @@
-﻿using PriorityQueueWebAPI.Helpers;
+﻿using MODELPriorityQueue.Models;
+using PriorityQueueWebAPI.Helpers;
+using PriorityQueueWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,7 @@ namespace PriorityQueueWebAPI
         }
 
         //http://localhost:51578/Statistics.aspx
-        protected async void GenerateDay_Click(object sender, EventArgs e)
+        protected void GenerateDay_Click(object sender, EventArgs e)
         {
             int month, day, year;
 
@@ -46,20 +48,10 @@ namespace PriorityQueueWebAPI
             DateError.Visible = false;
 
             StatGenerator.Period = StatGenerator.StatPeriod.Day;
-            var averageQueueSize = await StatGenerator.AverageQueueSize(date);
-            var averageWaitTime = await StatGenerator.AverageWaitTime(date);
-            var jobResponseRate = await StatGenerator.JobResponseRate(date);
-            var queueEmptyTime = await StatGenerator.QueueEmptyTime(date);
-            //var technicianIdleTime = await StatGenerator.TechnicianIdleTime(date);
-
-            DateLabel.Text = date.ToString();
-            AverageWaitTime.Text = averageWaitTime.ToString() + " hour(s)" ;
-            AverageQueueSize.Text = averageQueueSize.ToString() + " job(s)";
-            JobResponseRate.Text = jobResponseRate.ToString() + " hour(s)";
-            EmptyQueueTime.Text = queueEmptyTime.ToString() + "%";
+            DoStats(date);
         }
 
-        protected async void GenerateMonth_Click(object sender, EventArgs e)
+        protected void GenerateMonth_Click(object sender, EventArgs e)
         {
             int month, year;
             if (!(IsMonthValid(out month) && IsYearValid(out year)))
@@ -82,11 +74,30 @@ namespace PriorityQueueWebAPI
             DateError.Visible = false;
 
             StatGenerator.Period = StatGenerator.StatPeriod.Month;
+            DoStats(date);
+        }
+
+        private async void DoStats(DateTimeOffset date)
+        {
             var averageQueueSize = await StatGenerator.AverageQueueSize(date);
             var averageWaitTime = await StatGenerator.AverageWaitTime(date);
             var jobResponseRate = await StatGenerator.JobResponseRate(date);
             var queueEmptyTime = await StatGenerator.QueueEmptyTime(date);
             //var technicianIdleTime = await StatGenerator.TechnicianIdleTime(date);
+
+            AverageWaitTime.Text = averageWaitTime.ToString("0.00") + " hour(s)";
+            AverageQueueSize.Text = averageQueueSize.ToString("0.00") + " job(s)";
+            JobResponseRate.Text = jobResponseRate.ToString() + " jobs(s)";
+            EmptyQueueTime.Text = queueEmptyTime.ToString("0.00") + "%";
+
+            List<Technician> technicians = await WebApiHelper.Get<Technician>();
+            //TechnicianList.Items =
+        }
+
+        private struct IdleTechnician
+        {
+            public Technician t;
+            public double idleHours;
         }
 
         private bool IsMonthValid(out int month)

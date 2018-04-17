@@ -22,32 +22,28 @@
                 <asp:Button Text="Generate (Month)" runat="server" OnClick="GenerateMonth_Click"/>
             </div>
 
-            <table style="width:100%">
-                <tr>
-                    <th>Date</th>
-                    <th>Average Wait Time</th>
-                    <th>Average Queue Size</th>
-                    <th>Job Response Rate</th>
-                    <th>Empty Queue Time</th>
-                </tr>
-                <tr>
-                    <td>
-                        <asp:Label runat="server" ID="DateLabel">-</asp:Label>
-                    </td>
-                    <td>
-                         <asp:Label runat="server" ID="AverageWaitTime">-</asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label runat="server" ID="AverageQueueSize">-</asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label runat="server" ID="JobResponseRate">-</asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label runat="server" ID="EmptyQueueTime">-</asp:Label>
-                    </td>
-                </tr>
-            </table>
+            <div>
+                <p>Average time before a job is started:</p>
+                <asp:Label runat="server" ID="AverageWaitTime"></asp:Label>
+            </div>
+            <div>
+                <p>Average size of the job queue:</p>
+                <asp:Label runat="server" ID="AverageQueueSize"></asp:Label>
+            </div>
+            <div>
+                <p>Number of jobs not addressed the day they were entered:</p>
+                <asp:Label runat="server" ID="JobResponseRate"></asp:Label>
+            </div>
+            <div>
+                <p>Percentage of time the queue was empty:</p>
+                <asp:Label runat="server" ID="EmptyQueueTime"></asp:Label>
+            </div>
+            <asp:ListView runat="server" ID="TechnicianList">
+                <ItemTemplate>
+                    <asp:Label runat="server" Text='<%#Eval("FirstName") %>'/>
+                </ItemTemplate>
+            </asp:ListView>
+
         </div>
     </form>
 </body>
